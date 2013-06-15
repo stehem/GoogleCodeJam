@@ -1,4 +1,4 @@
-GoogleCodeJam
-=============
+https://code.google.com/codejam/
 
-GoogleCodeJam
+Alien Number:
+https://code.google.com/codejam/contest/32003/dashboard
