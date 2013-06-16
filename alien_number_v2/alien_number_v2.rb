@@ -1,8 +1,5 @@
 require_relative "../alien_number/alien_number"
 require "minitest/autorun"
-require 'benchmark'
-
-
 
 class AlienNumberV2
 
@@ -13,11 +10,14 @@ class AlienNumberV2
   end
 
   def base_count(n)
-    first_number = n.split("")[0]
+    first_number = n[0]
     first_number_base_block = "#{first_number}#{zero}"
-    count_for_first_number_base_block = @source.count_to(first_number_base_block, :increment)
-    length = n.split("").length
-    count_for_first_number_base_block*(language_length**(length-2))
+    @count_for_first_number_base_block ||= {} 
+    @count_for_first_number_base_block[first_number_base_block] ||= begin
+       @source.count_to(first_number_base_block, :increment)
+    end
+    length = n.length
+    @count_for_first_number_base_block[first_number_base_block]*(language_length**(length-2))
   end
 
   def zero
@@ -32,7 +32,7 @@ class AlienNumberV2
     n_to_a = n.split("")
     count = 0
     while n_to_a.any? 
-      add = base_count(n_to_a.join(""))
+      add = base_count(n_to_a)
       n_to_a.shift
       n_to_a.shift while n_to_a.first == zero
       count += add
@@ -51,6 +51,7 @@ class AlienNumberV2
         next_digit = @digit.next_digit(guess[d])
         break unless next_digit
         possible_next = guess.dup.tap { |clone| clone[d] =  next_digit }.join("")
+
         count = count_to(possible_next)
         if count == i
           guess[d] = next_digit
@@ -104,12 +105,6 @@ describe "V2" do
  
   
 end
-
-puts Benchmark.measure {  
-    anv2 = AlienNumberV2.new('$amn#Ed')
-    anv3 = AlienNumberV2.new('Gge5/9YJQ-O3Sl${k;&uo(+[DRr62NdA])8<|@M')
-    anv3.build_from(anv2.count_to('mnaan#mm#$n'))
-}
 
 
 
