@@ -16,10 +16,6 @@ class Language
     @length ||= @language.split("").length
   end
 
-  def five
-    @five ||= language.split("")[(length/2).to_i]
-  end
-
 end
 
 
